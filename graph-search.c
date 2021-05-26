@@ -76,7 +76,7 @@ int main()
 		case 'b': case 'B':
 			printf("start vertex");
 			scanf("%d", &x);
-            arraySet(visited);
+            		arraySet(visited);
 			breathFirstSearch(x,root);
 			break;
 
