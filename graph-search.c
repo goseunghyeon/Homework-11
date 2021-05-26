@@ -2,6 +2,13 @@
 #include<stdlib.h>
 
 #define Max 10
+#define FALSE 0
+#define TRUE 1
+short int visited[Max];
+int que[10] = { NULL };
+int front = 0;
+int rear = 0;
+
 typedef struct Node{
 	int vertex;
 	struct Node* next;
@@ -16,6 +23,11 @@ Root* initializeGraph();
 void insertVertex(Root* root);
 void printGraph(Root* root);
 void insertEdge(Root* root, int x, int y);
+void deapthFirstSearch(int n, Root* root);
+void arraySet(short int* visited);
+void breathFirstSearch(int n, Root* root);
+void addQue(int n);
+int deleteQue(void);
 int main()
 {
 	char command;
@@ -47,7 +59,11 @@ int main()
 			insertVertex(root);
 			break;
 		case 'd': case 'D':
-			//deapthFirstSearch();
+			printf("start vertex:");
+			scanf("%d", &x);
+			arraySet(visited);
+			deapthFirstSearch(x,root);
+			printf("\n");
 			break;
 		case 'p': case 'P':
 			printGraph(root);
@@ -55,10 +71,13 @@ int main()
 		case 'e': case 'E':
 			printf("insert two key:");
 			scanf("%d%d", &x,&y);
+			arraySet(visited);
 			insertEdge(root,x,y);
 			break;
 		case 'b': case 'B':
-			//breathFirstSearch();
+			printf("start vertex");
+			scanf("%d", &x);
+			breathFirstSearch(x,root);
 			break;
 
 		case 'q': case 'Q':
@@ -170,4 +189,81 @@ void printGraph(Root* root) {
 		}
 		printf("\n");
 	}
+}
+void arraySet(short int* visited) {
+	for (int i = 0; i < Max; i++) {
+		visited[i] = 0;
+	}
+}
+
+void deapthFirstSearch(int n, Root* root) {
+	
+	Node* sel=root->list[n];
+	if (sel == NULL) {
+		printf("No such vertex\n");
+		return;
+	}
+	visited[n] = TRUE;
+	printf("%5d", n);
+	for (sel = sel->next; sel; sel = sel->next) {
+		if (!visited[sel->vertex])
+			deapthFirstSearch(sel->vertex,root);
+	}
+
+}
+
+void breathFirstSearch(int n, Root* root) {
+	front = 0;
+	rear = 0;
+	for (int i = 0; i < Max; i++) {
+		que[i] = NULL;
+	}
+	Node* sel = root->list[n];
+	if (sel == NULL) {
+		printf("No such vertex\n");
+		return;
+	}
+	printf("%5d", n);
+	visited[n] = TRUE;
+	addQue(n);
+
+	while(front!=rear){
+		n=deleteQue();
+		
+		for (sel = root->list[n]->next; sel; sel = sel->next) {
+			if (!visited[sel->vertex]) {
+				printf("%5d", sel->vertex);
+				addQue(sel->vertex);
+				visited[sel->vertex] = TRUE;
+			}
+		}
+	}
+
+
+}
+
+void addQue(int n) {
+
+	if ((rear+1)%Max== front) {
+		printf("Queue is full.");
+	}
+	else {
+		rear = (rear+1)%Max;
+		que[rear] = n; 
+	}
+
+}
+int deleteQue(void) {
+
+	int x = NULL;
+	if (front == rear) {
+	   printf("Queue is empty.");
+	}
+	else {
+		front = (front+1)%Max;
+		x = que[front];
+		que[front]=NULL;
+	}
+	return x;
+	
 }
