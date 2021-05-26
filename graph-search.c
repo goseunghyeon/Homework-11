@@ -14,7 +14,7 @@ typedef struct Root {
 
 Root* initializeGraph();
 void insertVertex(Root* root);
-//void printGraph(Root* root);
+void printGraph(Root* root);
 void insertEdge(Root* root, int x, int y);
 int main()
 {
@@ -50,7 +50,7 @@ int main()
 			//deapthFirstSearch();
 			break;
 		case 'p': case 'P':
-			//printGraph(root);
+			printGraph(root);
 			break;
 		case 'e': case 'E':
 			printf("insert two key:");
@@ -86,14 +86,20 @@ Root* initializeGraph() {
 
 void insertVertex(Root* root) {
 	root->list[root->n] = (Node*)malloc(sizeof(Node));
-	root->list[root->n]->vertex = -1;
+	root->list[root->n]->vertex = root->n;
 	root->list[root->n]->next = NULL;
 
 	root->n++;
 }
 void insertEdge(Root* root, int x, int y) {
+	Node* prev=NULL;
+	Node* sel=NULL;
 	if (x >= root->n || y >= root->n) {
-		printf("full");
+		printf("range out\n");
+		return;
+	}
+	else if (root->list[x] == NULL || root->list[y] == NULL) {
+		printf("no vertex\n");
 		return;
 	}
 	else {
@@ -102,11 +108,66 @@ void insertEdge(Root* root, int x, int y) {
 
 		temp_x->vertex = x;
 		temp_y->vertex = y;
+		temp_x->next = NULL;
+		temp_y->next = NULL;
+		if (root->list[y]->next == NULL) {
+			root->list[y]->next = temp_x;
+		}
+		else {
+			sel = root->list[y]->next;
+			prev = root->list[y];
+			while (sel != NULL) {
+				if (sel->vertex > temp_x->vertex) {
+					temp_x->next = sel;
+					prev->next = temp_x;
+					break;
+				}
+				prev = sel;
+				sel = sel->next;
 
-		temp_x->next = root->list[y];
-		root->list[y]->next = temp_x;
-		temp_y->next = root->list[x];
-		root->list[x]->next = temp_y;
+				if (sel == NULL) {
+					prev->next = temp_x;
+					break;
+				}
+			}
+			
+		}
 
+		if (root->list[x]->next == NULL) {
+			root->list[x]->next = temp_y;
+		}
+		else {
+			sel = root->list[x]->next;
+			prev = root->list[x];
+			while (sel != NULL) {
+				if (sel->vertex > temp_y->vertex) {
+					temp_y->next = sel;
+					prev->next = temp_y;
+					break;
+				}
+				prev = sel;
+				sel = sel->next;
+
+				if (sel == NULL) {
+					prev->next = temp_y;
+					break;
+				}
+			}
+		}
+		
+	}
+}
+
+void printGraph(Root* root) {
+	int i = 0;
+	for (i; i < Max; i++) {
+		Node* sel = root->list[i];
+		printf("vertex:%d:", i);
+		if(sel!=NULL)
+		sel = sel->next;
+		for (; sel; sel = sel->next) {
+			printf("%d->", sel->vertex);
+		}
+		printf("\n");
 	}
 }
