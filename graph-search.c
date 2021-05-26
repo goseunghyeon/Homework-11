@@ -92,7 +92,8 @@ int main()
 
 	return 1;
 }
-
+/*그래프의 총개수를 초기화하고
+그래프의 연결을 초기화*/
 Root* initializeGraph() {
 	Root* root = (Root*)malloc(sizeof(Root));
 	root->n = 0;
@@ -102,7 +103,8 @@ Root* initializeGraph() {
 	}
 	return root;
 }
-
+/*정점을 생성하는 함수로 호출시마다
+순번대로 정점생성*/
 void insertVertex(Root* root) {
 	root->list[root->n] = (Node*)malloc(sizeof(Node));
 	root->list[root->n]->vertex = root->n;
@@ -110,6 +112,9 @@ void insertVertex(Root* root) {
 
 	root->n++;
 }
+/*엣지를 추가하는 함수로 
+정점을 생성후 원하는 엣지끼리 서로연결
+각 연결은 정점의 크기순서로 연결되게 구현*/
 void insertEdge(Root* root, int x, int y) {
 	Node* prev=NULL;
 	Node* sel=NULL;
@@ -176,7 +181,7 @@ void insertEdge(Root* root, int x, int y) {
 		
 	}
 }
-
+/*각 정점에 연결된 노드를 출력하는 함수*/
 void printGraph(Root* root) {
 	int i = 0;
 	for (i; i < Max; i++) {
@@ -190,12 +195,14 @@ void printGraph(Root* root) {
 		printf("\n");
 	}
 }
+/*탐색을 위한 배열 초기화*/
 void arraySet(short int* visited) {
 	for (int i = 0; i < Max; i++) {
 		visited[i] = 0;
 	}
 }
-
+/*깊이 우선탐색으로 재귀를 이용하여 배열을 탐색시1로 
+바꾸면서 출력한다 한번 탐색한 위치는 탐색을 안한다*/
 void deapthFirstSearch(int n, Root* root) {
 	
 	Node* sel=root->list[n];
@@ -211,7 +218,8 @@ void deapthFirstSearch(int n, Root* root) {
 	}
 
 }
-
+/*너비우선 탐색으로 기준 정점에서 큐를 이용하여
+레벨별로 상대적으로 출력한다*/
 void breathFirstSearch(int n, Root* root) {
 	front = 0;
 	rear = 0;
@@ -241,7 +249,7 @@ void breathFirstSearch(int n, Root* root) {
 
 
 }
-
+/*큐를 추가 원형큐*/
 void addQue(int n) {
 
 	if ((rear+1)%Max== front) {
@@ -253,6 +261,7 @@ void addQue(int n) {
 	}
 
 }
+/*큐제거 */
 int deleteQue(void) {
 
 	int x = NULL;
