@@ -71,12 +71,12 @@ int main()
 		case 'e': case 'E':
 			printf("insert two key:");
 			scanf("%d%d", &x,&y);
-			arraySet(visited);
 			insertEdge(root,x,y);
 			break;
 		case 'b': case 'B':
 			printf("start vertex");
 			scanf("%d", &x);
+            arraySet(visited);
 			breathFirstSearch(x,root);
 			break;
 
@@ -260,8 +260,8 @@ int deleteQue(void) {
 	   printf("Queue is empty.");
 	}
 	else {
+        x = que[front];
 		front = (front+1)%Max;
-		x = que[front];
 		que[front]=NULL;
 	}
 	return x;
